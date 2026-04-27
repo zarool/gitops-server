@@ -3,7 +3,7 @@ name: GitOps Docker
 on:
   push:
     paths:
-      - 'apps/**'
+      - 'src/docker/**'
 
 env:
   SELF_DOCKER_REG: "docker-registry:5000"
