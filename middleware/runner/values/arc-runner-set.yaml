@@ -1,4 +1,4 @@
-githubConfigUrl: "https://github.com/zarool/local-server"
+githubConfigUrl: "https://github.com/zarool/gitops-server"
 
 minRunners: 2
 maxRunners: 4
