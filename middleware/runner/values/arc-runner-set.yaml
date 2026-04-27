@@ -15,6 +15,11 @@ containerMode:
 template:
   spec:
 
+    securityContext:
+      fsGroup: 1001
+      runAsUser: 0
+      runAsGroup: 0
+
     initContainers:
     - name: init-dind-externals
       image: ghcr.io/actions/actions-runner:latest
@@ -22,6 +27,7 @@ template:
       volumeMounts:
         - name: dind-externals
           mountPath: /home/runner/tmpDir
+
     - name: dind
       image: docker:dind
       args:
@@ -51,7 +57,6 @@ template:
         - name: dind-externals
           mountPath: /home/runner/externals
 
-
     containers:
     - name: runner
       image: local-server-runner:0.0.1
@@ -61,6 +66,8 @@ template:
           value: unix:///var/run/docker.sock
         - name: RUNNER_WAIT_FOR_DOCKER_IN_SECONDS
           value: "20"
+        - name: RUNNER_ALLOW_RUNASROOT
+          value: "true"
       volumeMounts:
         - name: work
           mountPath: /home/runner/_work
