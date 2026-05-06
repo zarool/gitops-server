@@ -59,7 +59,7 @@ template:
 
     containers:
     - name: runner
-      image: local-server-runner:0.0.1
+      image: docker-registry:5000/local-server-runner:0.0.1
       command: ["/home/runner/run.sh"]
       env:
         - name: DOCKER_HOST

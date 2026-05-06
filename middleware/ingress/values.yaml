@@ -1,6 +1,6 @@
 controller:
   hostNetwork: true
-  # dnsPolicy: CLusterFirstWithHostNet
+  #dnsPolicy: ClusterFirstWithHostNet
 
   config:
     allow-snippet-annotations: "true"
