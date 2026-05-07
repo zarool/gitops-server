@@ -2,4 +2,4 @@ FROM alpine:latest
 
 RUN : \
     && touch test \
-    && echo "testing new image" >> test
+    && echo "testing new image test" >> test
