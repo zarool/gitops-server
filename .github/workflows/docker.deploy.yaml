@@ -6,6 +6,7 @@ on:
       - 'src/docker/**'
 
 env:
+  TARGET_FOLDER: 'src/docker'
   SELF_DOCKER_REG: "docker-registry:5000"
 
 jobs:
@@ -25,7 +26,7 @@ jobs:
         uses: tj-actions/changed-files@v42
         with:
           dir_names: true
-          files: apps/**
+          files: ${{ env.TARGET_FOLDER }}/**
 
       - name: Generate Matrix JSON
         id: set-matrix
