@@ -1,6 +1,6 @@
 controller:
   hostNetwork: true
-  #dnsPolicy: ClusterFirstWithHostNet
+  dnsPolicy: ClusterFirstWithHostNet
 
   config:
     allow-snippet-annotations: "true"
@@ -11,6 +11,6 @@ controller:
   extraArgs:
     default-ssl-certificate: "ingress-controller/tls-cert"
 
-service:
-  enabled: true
-  type: ClusterIP
+  service:
+    enabled: true
+    type: ClusterIP
