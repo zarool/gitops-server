@@ -6,7 +6,7 @@ expose:
 
   ingress:
     controller: default
-    className: ingress
+    className: nginx
     hosts:
       core: harbor.cloud.worker
 
