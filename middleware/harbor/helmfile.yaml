@@ -1,0 +1,23 @@
+repositories:
+- name: harbor-repo
+  url: https://helm.goharbor.io
+
+helmDefaults:
+  createNamespace: true
+  wait: false
+  timeout: 600
+
+templates:
+  default: &default
+    missingFileHandler: Error
+    namespace: gitops
+    values:
+      - "./values.yaml"
+    secrets:
+      - "./secrets.yaml"
+
+releases:
+  - name: harbor
+    chart: harbor-repo/harbor
+    <<: *default
+    version: 1.19.x

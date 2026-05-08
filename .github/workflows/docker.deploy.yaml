@@ -63,13 +63,8 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build -t ${{ matrix.name }}:${{ matrix.tag }} ./${{ matrix.path }}
-          docker tag ${{ matrix.name }}:${{ matrix.tag }} ${{ env.SELF_DOCKER_REG }}/${{ matrix.name }}:${{ matrix.tag }}
+          docker build -t ${{ env.SELF_DOCKER_REG }}/${{ matrix.name }}:${{ matrix.tag }} ./${{ matrix.path }}
 
       - name: Export and Import to cluster registry
         run: |
           docker push ${{ env.SELF_DOCKER_REG }}/${{ matrix.name }}:${{ matrix.tag }}
-
-      - name: List current images - testing only
-        run: |
-          docker images

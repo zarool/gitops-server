@@ -1,0 +1,11 @@
+expose:
+  type: ingress
+
+  ingress:
+    hosts:
+      core: harbor.cloud.worker
+    className: ingress
+
+  tls:
+    enabled: true
+    certSource: none
