@@ -14,7 +14,7 @@ templates:
     values:
       - "./values.yaml"
     secrets:
-      - "./secrets.yaml"
+      - "./encrypted.yaml"
 
 releases:
   - name: harbor

@@ -1,11 +1,37 @@
 expose:
   type: ingress
-
-  ingress:
-    hosts:
-      core: harbor.cloud.worker
-    className: ingress
-
   tls:
     enabled: true
     certSource: none
+
+  ingress:
+    controller: default
+    className: ingress
+    hosts:
+      core: harbor.cloud.worker
+
+
+externalURL: https://harbor.cloud.worker
+
+persistence:
+  enabled: true
+  resourcePolicy: "keep"
+  persistentVolumeClaim:
+    registry:
+      size: 250Gi
+      storageClass: "local-path-retain"
+    chartmuseum:
+      size: 30Gi
+      storageClass: "local-path-retain"
+    database:
+      size: 10Gi
+      storageClass: "local-path-retain"
+    redis:
+      size: 5Gi
+      storageClass: "local-path-retain"
+    jobservice:
+      size: 10Gi
+      storageClass: "local-path-retain"
+
+metrics:
+  enabled: true
