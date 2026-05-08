@@ -10,7 +10,7 @@ helmDefaults:
 templates:
   default: &default
     missingFileHandler: Error
-    namespace: gitops
+    namespace: registry
     values:
       - "./values.yaml"
     secrets:
