@@ -15,7 +15,7 @@ containerMode:
 template:
   spec:
     imagePullSecrets:
-      - name: harbor-auth
+      - name: harbor-config
 
     securityContext:
       fsGroup: 1001
