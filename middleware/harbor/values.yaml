@@ -1,14 +1,19 @@
 expose:
   type: ingress
   tls:
-    enabled: true
-    certSource: none
+    enabled: false
+    certSource: secret
+    secret:
+      secretName: tls-cert
 
   ingress:
     controller: default
     className: nginx
     hosts:
       core: harbor.cloud.worker
+    annotations:
+      nginx.ingress.kubernetes.io/ssl-redirect: "false"
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
 
 
 externalURL: https://harbor.cloud.worker

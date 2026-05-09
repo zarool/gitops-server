@@ -14,6 +14,8 @@ containerMode:
 
 template:
   spec:
+    imagePullSecrets:
+      - name: harbor-auth
 
     securityContext:
       fsGroup: 1001
@@ -34,8 +36,9 @@ template:
         - dockerd
         - --host=unix:///var/run/docker.sock
         - --group=$(DOCKER_GROUP_GID)
+        - --insecure-registry=harbor.cloud.worker:443
         - --insecure-registry=harbor.cloud.worker
-        - --mtu=1450
+        - --mtu=1400
       env:
         - name: DOCKER_GROUP_GID
           value: "123"
@@ -59,8 +62,6 @@ template:
           mountPath: /var/run
         - name: dind-externals
           mountPath: /home/runner/externals
-        - name: harbor-auth
-          mountPath: /docker-config
 
     containers:
     - name: runner
@@ -80,10 +81,7 @@ template:
           mountPath: /home/runner/_work
         - name: dind-sock
           mountPath: /var/run
-        - name: harbor-auth
-          mountPath: /home/runner/.docker/config.json
-          subPath: config.json
-          readOnly: true
+
     volumes:
     - name: work
       emptyDir: {}
@@ -91,9 +89,3 @@ template:
       emptyDir: {}
     - name: dind-externals
       emptyDir: {}
-    - name: harbor-auth
-      secret:
-        secretName: harbor-config
-        items:
-          - key: .dockerconfigjson
-            path: config.json
