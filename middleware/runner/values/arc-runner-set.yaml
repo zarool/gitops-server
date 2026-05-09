@@ -81,7 +81,6 @@ template:
           mountPath: /var/run
         - name: harbor-auth
           mountPath: /docker-config
-          readOnly: true
     volumes:
     - name: work
       emptyDir: {}
