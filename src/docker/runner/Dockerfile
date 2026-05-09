@@ -16,6 +16,16 @@ RUN : \
         jq \
         curl \
         tar \
+        openssl \
+        ca-certificates \
+        gnupg \
+        lsb-release \
+        git \
+        gettext-base \
+        dnsutils \
+        iputils-ping \
+        unzip \
+        zip \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
