@@ -73,14 +73,16 @@ template:
         - name: RUNNER_ALLOW_RUNASROOT
           value: "true"
         - name: DOCKER_CONFIG
-          value: /docker-config
+          value: /home/runner/.docker/
       volumeMounts:
         - name: work
           mountPath: /home/runner/_work
         - name: dind-sock
           mountPath: /var/run
         - name: harbor-auth
-          mountPath: /docker-config
+          mountPath: /home/runner/.docker/config.json
+          subPath: config.json
+          readOnly: true
     volumes:
     - name: work
       emptyDir: {}
