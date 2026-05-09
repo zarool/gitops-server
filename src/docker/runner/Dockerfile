@@ -36,11 +36,9 @@ RUN : \
 
 # install helm 4
 RUN : \
-    && nslookup raw.githubusercontent.com \
-    && curl -I https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-4 \
-    && curl -fsSL -o ./get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-4 \
-    && chmod 700 ./get_helm.sh \
-    && ./get_helm.sh
+    && curl -fsSL https://get.helm.sh/helm-v4.0.0-linux-amd64.tar.gz | tar -xz \
+    && mv linux-amd64/helm /usr/local/bin/helm \
+    && rm -rf linux-amd64
 
 # install helmfiles and plugins
 RUN : \
