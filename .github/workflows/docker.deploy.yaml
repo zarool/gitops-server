@@ -7,7 +7,8 @@ on:
 
 env:
   TARGET_FOLDER: 'src/docker'
-  SELF_DOCKER_REG: "harbor.cloud.worker/local"
+  IMAGE_REGISTRY: "harbor.cloud.worker"
+  IMAGE_PROJECT: "local"
 
 jobs:
   prepare:
@@ -61,10 +62,10 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - name: Build Docker Image
+      - name: Build docker image
         run: |
-          docker build -t ${{ env.SELF_DOCKER_REG }}/${{ matrix.name }}:${{ matrix.tag }} ./${{ matrix.path }}
+          docker build -t ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_PROJECT }}/${{ matrix.name }}:${{ matrix.tag }} ./${{ matrix.path }}
 
-      - name: Export and Import to cluster registry
+      - name: Push to registry
         run: |
-          docker push ${{ env.SELF_DOCKER_REG }}/${{ matrix.name }}:${{ matrix.tag }}
+          docker push ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_PROJECT }}/${{ matrix.name }}:${{ matrix.tag }}
