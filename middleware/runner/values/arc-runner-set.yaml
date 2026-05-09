@@ -34,7 +34,7 @@ template:
         - dockerd
         - --host=unix:///var/run/docker.sock
         - --group=$(DOCKER_GROUP_GID)
-        - --insecure-registry=docker-registry:500
+        - --insecure-registry=harbor.cloud.worker
         - --mtu=1450
       env:
         - name: DOCKER_GROUP_GID
