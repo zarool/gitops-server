@@ -71,4 +71,9 @@ jobs:
 
       - name: Push to registry
         run: |
+          # testing
+          openssl s_client -showcerts -connect harbor.cloud.worker:443 </dev/null 2>/dev/null | openssl x509 -outform PEM > harbor.crt
+          mkdir -p /etc/docker/certs.d/harbor.cloud.worker/
+          cp harbor.crt /etc/docker/certs.d/harbor.cloud.worker/ca.crt
+          # ############
           docker push ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_PROJECT }}/${{ matrix.name }}:${{ matrix.tag }}
