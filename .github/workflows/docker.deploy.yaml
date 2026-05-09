@@ -7,7 +7,7 @@ on:
 
 env:
   TARGET_FOLDER: 'src/docker'
-  SELF_DOCKER_REG: "docker-registry:5000"
+  SELF_DOCKER_REG: "harbor.cloud.worker/local"
 
 jobs:
   prepare:
