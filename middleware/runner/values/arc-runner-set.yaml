@@ -38,6 +38,8 @@ template:
       env:
         - name: DOCKER_GROUP_GID
           value: "123"
+        - name: DOCKER_CONFIG
+          value: /docker-config
       securityContext:
         privileged: true
       restartPolicy: Always
@@ -56,6 +58,8 @@ template:
           mountPath: /var/run
         - name: dind-externals
           mountPath: /home/runner/externals
+        - name: harbor-auth
+          mountPath: /docker-config
 
     containers:
     - name: runner
@@ -68,12 +72,16 @@ template:
           value: "20"
         - name: RUNNER_ALLOW_RUNASROOT
           value: "true"
+        - name: DOCKER_CONFIG
+          value: /docker-config
       volumeMounts:
         - name: work
           mountPath: /home/runner/_work
         - name: dind-sock
           mountPath: /var/run
-
+        - name: harbor-auth
+          mountPath: /docker-config
+          readOnly: true
     volumes:
     - name: work
       emptyDir: {}
@@ -81,3 +89,9 @@ template:
       emptyDir: {}
     - name: dind-externals
       emptyDir: {}
+    - name: harbor-auth
+      secret:
+        secretName: harbor-config
+        items:
+          - key: .dockerconfigjson
+            path: config.json
