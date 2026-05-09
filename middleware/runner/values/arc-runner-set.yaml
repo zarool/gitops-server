@@ -17,6 +17,11 @@ template:
     imagePullSecrets:
       - name: harbor-config
 
+    hostAliases:
+      - ip: "10.43.150.184"
+        hostnames:
+        - "harbor.cloud.worker"
+
     securityContext:
       fsGroup: 1001
       runAsUser: 0
