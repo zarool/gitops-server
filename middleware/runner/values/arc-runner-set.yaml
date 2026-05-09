@@ -30,10 +30,20 @@ template:
     initContainers:
     - name: init-dind-externals
       image: ghcr.io/actions/actions-runner:latest
-      command: ["cp", "-r", "/home/runner/externals/.", "/home/runner/tmpDir/"]
+      command:
+        - /bin/bash
+        - -c
+        - |
+          cp -r /home/runner/externals/. /home/runner/tmpDir/
+
+          mkdir -p /etc/docker/certs.d/harbor.cloud.worker
+          openssl s_client -showcerts -servername harbor.cloud.worker -connect harbor.cloud.worker:443 </dev/null 2>/dev/null | openssl x509 -outform PEM > /etc/docker/certs.d/harbor.cloud.worker/ca.crt
+
       volumeMounts:
         - name: dind-externals
           mountPath: /home/runner/tmpDir
+        - name: docker-certs
+          mountPath: /etc/docker/certs.d
 
     - name: dind
       image: docker:dind
@@ -41,7 +51,6 @@ template:
         - dockerd
         - --host=unix:///var/run/docker.sock
         - --group=$(DOCKER_GROUP_GID)
-        - --insecure-registry=harbor.cloud.worker:443
         - --insecure-registry=harbor.cloud.worker
         - --mtu=1400
       env:
@@ -67,6 +76,8 @@ template:
           mountPath: /var/run
         - name: dind-externals
           mountPath: /home/runner/externals
+        - name: docker-certs
+          mountPath: /etc/docker/certs.d
 
     containers:
     - name: runner
@@ -93,4 +104,6 @@ template:
     - name: dind-sock
       emptyDir: {}
     - name: dind-externals
+      emptyDir: {}
+    - name: docker-certs
       emptyDir: {}
