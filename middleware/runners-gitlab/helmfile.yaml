@@ -1,0 +1,23 @@
+repositories:
+  - name: gitlab
+    url: https://charts.gitlab.io
+
+helmDefaults:
+  createNamespace: true
+  wait: false
+  timeout: 600
+
+templates:
+  default: &default
+    missingFileHandler: Error
+    namespace: gitops
+    values:
+      - "./values.yaml"
+    secrets:
+      - "./encrypted.yaml"
+
+releases:
+  - name: gitlab-runner
+    chart: gitlab/gitlab-runner
+    <<: *default
+    version: 0.63.0
