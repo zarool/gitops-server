@@ -9,7 +9,7 @@ controller:
     force-ssl-redirect: "true"
 
   extraArgs:
-    default-ssl-certificate: "ingress-controller/tls-cert"
+    default-ssl-certificate: "ingress-controller/tls-cert-chain"
 
   service:
     enabled: true

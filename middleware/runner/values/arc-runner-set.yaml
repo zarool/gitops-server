@@ -29,35 +29,45 @@ template:
 
     initContainers:
     - name: init-dind-externals
-      image: ghcr.io/actions/actions-runner:latest
-      command:
-        - /bin/bash
-        - -c
-        - |
-          cp -r /home/runner/externals/. /home/runner/tmpDir/
-
-          mkdir -p /etc/docker/certs.d/harbor.cloud.worker
-          openssl s_client -showcerts -servername harbor.cloud.worker -connect harbor.cloud.worker:443 </dev/null 2>/dev/null | openssl x509 -outform PEM > /etc/docker/certs.d/harbor.cloud.worker/ca.crt
-
+      image: harbor.cloud.worker/local/runner:0.0.3
+      command: ["cp", "-r", "/home/runner/externals/.", "/home/runner/tmpDir/"]
       volumeMounts:
         - name: dind-externals
           mountPath: /home/runner/tmpDir
-        - name: docker-certs
-          mountPath: /etc/docker/certs.d
 
     - name: dind
       image: docker:dind
-      args:
-        - dockerd
-        - --host=unix:///var/run/docker.sock
-        - --group=$(DOCKER_GROUP_GID)
-        - --insecure-registry=harbor.cloud.worker
-        - --mtu=1400
+
+      command:
+        - sh
+        - -c
+        - |
+          set -e
+
+          cp /certs/ca.crt /usr/local/share/ca-certificates/harbor.crt
+          update-ca-certificates --fresh
+
+          mkdir -p /etc/docker/certs.d/harbor.cloud.worker
+          cp /certs/ca.crt /etc/docker/certs.d/harbor.cloud.worker/ca.crt
+
+          # now start dockerd
+          exec dockerd \
+            --host=unix:///var/run/docker.sock \
+            --group=$(DOCKER_GROUP_GID) \
+            --mtu=1450
+
+      # args:
+      #   - dockerd
+      #   - --host=unix:///var/run/docker.sock
+      #   - --group=$(DOCKER_GROUP_GID)
+      #   - --mtu=1400
       env:
         - name: DOCKER_GROUP_GID
           value: "123"
         - name: DOCKER_CONFIG
           value: /docker-config
+        - name: DOCKER_TLS_CERTDIR
+          value: ""
       securityContext:
         privileged: true
       restartPolicy: Always
@@ -76,12 +86,14 @@ template:
           mountPath: /var/run
         - name: dind-externals
           mountPath: /home/runner/externals
-        - name: docker-certs
-          mountPath: /etc/docker/certs.d
+        - name: harbor-root-ca
+          mountPath: /certs
+          readOnly: true
 
     containers:
     - name: runner
-      image: docker-registry:5000/local-server-runner:0.0.2
+      #image: docker-registry:5000/local-server-runner:0.0.2
+      image: harbor.cloud.worker/local/runner:0.0.3
       command: ["/home/runner/run.sh"]
       env:
         - name: DOCKER_HOST
@@ -107,3 +119,6 @@ template:
       emptyDir: {}
     - name: docker-certs
       emptyDir: {}
+    - name: harbor-root-ca
+      secret:
+        secretName: harbor-root-ca
